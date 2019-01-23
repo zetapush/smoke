@@ -1,0 +1,58 @@
+macroscript listFiles(
+	string folder = '/'
+) {
+	var listing = fs.ls({ folder });
+} return { listing } on channel __selfName
+
+macroscript uploadFile(
+    string path = '/'
+) {
+    var upload = fs.newUploadUrl({ path });
+} return  upload  on channel __selfName
+
+macroscript addFile(
+    string guid,
+    map metadata,
+    array tags
+) {
+    var file = fs.newFile({ guid, metadata, tags });
+} broadcast { file } on channel __selfName
+
+macroscript chien(){
+	sqls.update({
+		parameters : [], 
+		statement : "INSERT IGNORE INTO CHIEN (ID, NAME) VALUES (1, 'un_chien_sql')"
+	});	
+//	const sqlRes = sqls.query({
+//		parameters : [], 
+//		statement : "SELECT ID, NAME FROM CHIEN"
+//	});
+
+	es.index({type : 'file', id : 'chien', index : 'gallery', data : {
+		tags: "le chien",
+		name : "ce sont des super chiens de search"
+	}});	
+	const searchRes = es.get({
+		type : "file",
+		id : "chien",
+		index : "gallery"
+	});
+
+	gda.put({ 
+		table : 'chien', 
+		data : "vive les chiens GDA", 
+		key : 'chien', 
+		column : 'chien'
+	});
+	const gdaRes = gda.get({
+		table : 'chien', 
+		key : 'chien'
+	});
+	
+	
+	
+} broadcast {
+//	"sql" : sqlRes,
+	"search" : searchRes,
+	"gda" : gdaRes
+	} on channel __selfName

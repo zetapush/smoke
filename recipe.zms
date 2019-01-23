@@ -1,0 +1,18 @@
+recipe fr.zetapush.gallery 1.0.0;
+
+service api = macro(__default) for 'src';
+
+service auth = weak(__default);
+
+service es = search(__default);
+
+service task = cron(__default);
+
+service sqls = rdbms(__default);
+
+service gda = gda(__default);
+
+/** create a file storage with thumbnail auto creation */
+service fs = zpfs_hdfs('zpfs_hdfs_0').options({
+    upload_thumbnails: '250,500,1000' // auto-magically create thumbnails 
+});

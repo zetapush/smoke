@@ -1,0 +1,35 @@
+es.search_createIndex({
+	index: 'gallery',
+	mappings: {
+		file: {
+			properties: {
+				tags: {
+					type: "string"
+				},
+				name: {
+					type: "string"
+				}
+			}
+		}
+	}
+});
+
+sqls.rdbms_ddl({statement : '
+CREATE TABLE IF NOT EXISTS CHIEN(
+   ID   INT              NOT NULL,
+   NAME VARCHAR (20)     ,
+   AGE  INT              ,
+   ADDRESS  CHAR (25) ,
+   SALARY   DECIMAL (18, 2),
+   PRIMARY KEY (ID)
+);
+'});
+
+gda.gda_createTable({
+	name: "chien",
+	columns: [{
+		map: false,
+		name: "chien",
+		type: GdaDataType_STRING
+	}]
+});
